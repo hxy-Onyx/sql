@@ -1,0 +1,136 @@
+常见约束包括：
+NOT NULL 约束
+UNIQUE 约束
+PRIMARY KEY 约束
+FOREIGN KEY 约束
+CHECK 约束
+DEFAULT 约束
+----------------------------
+1. NOT NULL 约束
+NOT NULL 约束用于确保某一列不能存储 NULL 值。
+
+语法：
+CREATE TABLE table_name (
+    column_name datatype NOT NULL
+);
+
+示例：
+创建一个员工表 employee，要求 name 列不能为 NULL：
+
+CREATE TABLE employee (
+    id INT,
+    name VARCHAR(50) NOT NULL,
+    salary DECIMAL(10, 2)
+);
+INSERT INTO employee (id, salary) VALUES (1, 5000); -- 错误，name 不能为空
+  
+2. UNIQUE 约束
+UNIQUE 约束用于确保某一列或多列的值不能重复
+
+语法：
+CREATE TABLE table_name (
+    column_name datatype UNIQUE
+);
+示例：
+创建一个学生表 student，要求 email 列中的值不能重复：
+CREATE TABLE student (
+    id INT,
+    name VARCHAR(50),
+    email VARCHAR(100) UNIQUE
+);
+INSERT INTO student (id, name, email) VALUES (1, 'Alice', 'alice@example.com');
+INSERT INTO student (id, name, email) VALUES (2, 'Bob', 'alice@example.com'); -- 错误，email 重复
+  
+3. PRIMARY KEY 约束
+PRIMARY KEY 约束是 UNIQUE 和 NOT NULL 约束的结合，不能重复，而且不能为空。
+一个表只能有一个 PRIMARY KEY，并且通常用作唯一标识表中每一行的主键。
+
+语法：
+CREATE TABLE table_name (
+    column_name datatype PRIMARY KEY
+);
+示例：
+创建一个员工表 employee，并设置 id 列为主键：
+CREATE TABLE employee (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    salary DECIMAL(10, 2)
+);
+INSERT INTO employee (id, name, salary) VALUES (1, 'Alice', 5000);
+INSERT INTO employee (id, name, salary) VALUES (1, 'Bob', 6000); -- 错误，id 重复
+  
+复合主键（组合多个列作为主键）：
+CREATE TABLE enrollment (
+    student_id INT,
+    course_id INT,
+    PRIMARY KEY (student_id, course_id)
+);
+这个表中，student_id 和 course_id 组合在一起作为主键，确保一个学生不能在同一个课程中注册两次。
+
+4. FOREIGN KEY 约束
+FOREIGN KEY 约束用于建立表之间的关联，确保外键列中的值必须存在于父表的主键列中。它用于保持数据的参照完整性。
+
+语法：
+CREATE TABLE table_name (
+    column_name datatype,
+    FOREIGN KEY (column_name) REFERENCES parent_table (parent_column)
+);
+
+示例：
+创建一个部门表 department 和一个员工表 employee，employee 表中的 dept_id 是一个外键，引用 department 表的 id：
+CREATE TABLE department (
+    id INT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+CREATE TABLE employee (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES department(id)
+);
+在这个例子中，employee 表中的 dept_id 列必须引用 department 表中的现有 id，否则会报错。
+
+INSERT INTO employee (id, name, dept_id) VALUES (1, 'Alice', 1); -- 正确，部门ID为1存在
+INSERT INTO employee (id, name, dept_id) VALUES (2, 'Bob', 99); -- 错误，部门ID为99不存在
+  
+5. CHECK 约束
+CHECK 约束用于确保列中的数据满足特定的条件。它可以用于限制列中的数值范围、数据格式等。
+复制代码
+CREATE TABLE table_name (
+    column_name datatype CHECK (condition)
+);
+示例：
+创建一个员工表 employee，要求工资 salary 必须大于 0：
+CREATE TABLE employee (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    salary DECIMAL(10, 2) CHECK (salary > 0)
+);
+
+INSERT INTO employee (id, name, salary) VALUES (1, 'Alice', -5000); -- 错误，工资为负数
+  
+复杂的 CHECK 约束：
+CREATE TABLE student (
+    id INT PRIMARY KEY,
+    age INT CHECK (age >= 18 AND age <= 25) -- 限制年龄在 18 到 25 之间
+);
+
+6. DEFAULT 约束
+DEFAULT 约束用于在列中未提供数据时，设置列的默认值。这个约束允许在插入记录时，自动为某些列提供默认值，而不是手动填写。
+语法
+CREATE TABLE table_name (
+    column_name datatype DEFAULT default_value
+);
+
+示例：
+创建一个员工表 employee，设置默认工资为 3000：
+CREATE TABLE employee (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    salary DECIMAL(10, 2) DEFAULT 3000
+);
+INSERT INTO employee (id, name) VALUES (1, 'Alice'); -- 工资自动设置为3000
+  
+
+
