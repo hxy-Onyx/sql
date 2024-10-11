@@ -1,0 +1,10 @@
+1. 多行子查询：常用all、any、in
+示例 1：查询雇员表中所有工资大于部门编号为 20 的雇员的最高工资的雇员信息
+SELECT empno, ename, sal 
+FROM emp 
+WHERE sal > (SELECT MAX(sal) FROM emp WHERE deptno = 20);
+2. 多列子查询
+示例 1：查询工资和奖金与 ALLEN 相同的雇员
+SELECT empno, ename, sal, comm 
+FROM emp 
+WHERE (sal, comm) = (SELECT sal, comm FROM emp WHERE ename = 'ALLEN');
