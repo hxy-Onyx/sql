@@ -1,0 +1,39 @@
+主表（也叫父表）和从表（也叫子表）通常用来描述数据库中表与表之间的一对多或多对一的关系。
+主表与从表的关系通过 主键 和 外键 来建立，它们的关系可以用于维护数据库中的数据完整性和参照完整性。
+
+
+3. 主从表的关系
+主表 和 从表（或叫父表和子表）是通过 主键 和 外键 来建立关系的。主表的 主键 是唯一标识每一行记录的列，
+而从表中的 外键 则引用主表的主键，从而建立起两个表之间的一对多或多对一关系。
+
+一对多关系：一个主表中的记录可以被多个从表中的记录引用。例如，一个部门可以有多个员工，这就是 一对多 的关系。
+多对一关系：从从表的角度看，多个记录可以引用主表中的同一条记录。例如，多个员工可以属于同一个部门，这就是 多对一 的关系。
+示例：主从表关系中的一对多
+
+-- 部门表：主表
+CREATE TABLE department (
+    id INT PRIMARY KEY,      -- 部门 id 作为主键
+    name VARCHAR(50)
+);
+
+-- 员工表：从表
+CREATE TABLE employee (
+    id INT PRIMARY KEY,      -- 员工 id 作为主键
+    name VARCHAR(50),
+    dept_id INT,             -- 员工的部门 id，作为外键
+    FOREIGN KEY (dept_id) REFERENCES department(id)  -- 外键，引用 department 表的 id 列
+);
+在这个关系中：
+
+主表 是 department，其中 id 是主键，表示部门编号。
+从表 是 employee，其中 dept_id 是外键，表示员工所属的部门，它引用了 department 表的 id 列。
+每个部门可以有多个员工，但每个员工只能属于一个部门。这就是主从表关系中的典型 一对多 关系。
+
+插入示例：
+-- 插入部门
+INSERT INTO department (id, name) VALUES (1, 'HR'), (2, 'IT');
+
+-- 插入员工，dept_id 引用 department 表的 id
+INSERT INTO employee (id, name, dept_id) VALUES (1, 'Alice', 1);  -- Alice 属于 HR 部门
+INSERT INTO employee (id, name, dept_id) VALUES (2, 'Bob', 2);    -- Bob 属于 IT 部门
+INSERT INTO employee (id, name, dept_id) VALUES (3, 'Charlie', 1);-- Charlie 也属于 HR 部门
