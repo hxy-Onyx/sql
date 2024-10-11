@@ -1,0 +1,12 @@
+视图的语法
+CREATE VIEW 视图名称 AS
+SELECT 列名1, 列名2, ...
+FROM 表名
+WHERE 条件;
+视图的特点：
+1.视图本身不存储数据
+2.不适用于频繁更新的场景
+假设有一个表 employees，表中存储了员工的信息，但我们希望创建一个视图，只显示员工的名字和部门而不暴露工资信息：
+CREATE VIEW employee_view AS
+SELECT name, department
+FROM employees;
