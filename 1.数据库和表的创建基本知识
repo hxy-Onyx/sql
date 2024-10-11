@@ -1,0 +1,28 @@
+1.数据库创建删除的相关语句
+create database data01 character_set utf8 collate utf8_bin;
+show data01;
+show create database data01;
+drop database [if exists] data01;
+2.表创建语句
+create table table1{
+id int,
+`name` varchar(23),
+`password` varchar(15),
+`birthday` date
+}character_set utf8 collate utf8_bin;
+3.表修改语句
+alter table table——name  
+add（添加列）
+modify（修改列）
+drop（删除列）
+4.属性
+数值类型：
+整数型：bit、tinybit、smallint、mediumint、int、bigint
+int [unsigned] 无符号的和有符号的范围不同
+浮点型：float、double、decimal（m，n）
+文本类型：
+char、varhcar、bolb、text
+日期类型
+date、datetime、timestamp
+
+
