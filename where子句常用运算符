@@ -1,0 +1,106 @@
+基本分类
+比较运算符：=、!=、>、<、>=、<=
+逻辑运算符：AND、OR、NOT
+范围运算符：BETWEEN、IN
+模式匹配运算符：LIKE、ILIKE（不区分大小写）
+空值判断运算符：IS NULL、IS NOT NULL
+集合运算符：ANY、ALL
+算术运算符：+、-、*、/、%
+
+1. 比较运算符
+=	等于	age = 25
+!= 或 <>'	不等于	age != 25 或 age <> 25
+>	大于	salary > 5000
+<	小于	salary < 5000
+>=	大于或等于	age >= 18
+<=	小于或等于	age <= 18
+
+示例
+SELECT name, salary
+FROM employee
+WHERE salary >= 5000;
+返回所有工资大于等于 5000 的员工信息。
+
+2. 逻辑运算符
+
+AND	两个条件都为 true 时成立	age >= 18 AND age <= 25
+OR	其中一个条件为 true 时成立	salary < 5000 OR age < 30
+NOT	对条件结果取反	NOT age = 30
+
+示例：
+SELECT name, age, salary
+FROM employee
+WHERE age > 30 AND salary < 8000;
+返回所有年龄大于 30 且工资小于 8000 的员工信息。
+
+3. BETWEEN 和 IN
+BETWEEN ... AND ...：用于查询在某个范围内的值，范围是闭区间，包括边界值。
+IN：用于匹配多个指定的值。
+示例
+SELECT name, age
+FROM employee
+WHERE age BETWEEN 25 AND 35;
+返回所有年龄在 25 到 35 岁之间的员工（包括 25 和 35）。
+
+示例 2：使用 IN
+
+SELECT name, department
+FROM employee
+WHERE department IN ('HR', 'Sales', 'IT');
+返回属于 HR、Sales 或 IT 部门的员工信息。
+
+4. LIKE 和 ILIKE
+LIKE：用于进行模式匹配，通常用于字符串的部分匹配。
+ILIKE（PostgreSQL 中支持）：与 LIKE 类似，但不区分大小写。
+通配符：
+%：表示任意数量的字符（可以是 0 个或多个字符）。
+_：表示任意一个字符。
+示例：
+
+SELECT name
+FROM employee
+WHERE name LIKE 'A%';
+返回以字母 A 开头的所有员工姓名。
+
+5. IS NULL 和 IS NOT NULL
+用于判断字段是否为 NULL。
+
+示例：
+SELECT name, phone
+FROM employee
+WHERE phone IS NOT NULL;
+返回所有有电话号码的员工信息。
+
+6.  ANY、ALL
+ANY 和 ALL：用于比较子查询返回的集合中的任意一个或所有值。
+
+示例 ：使用 ANY
+SELECT name, salary
+FROM employee
+WHERE salary > ANY (SELECT salary FROM employee WHERE department = 'HR');
+返回所有工资高于 HR 部门任意一个员工的员工信息。
+
+示例：使用 ALL
+SELECT name, salary
+FROM employee
+WHERE salary > ALL (SELECT salary FROM employee WHERE department = 'HR');
+返回工资高于 HR 部门所有员工的员工信息。
+
+7. 算术运算符
+可以在 WHERE 子句中使用算术运算符进行数值计算和比较。
+
++	加法	salary + 1000
+-	减法	age - 2
+*	乘法	salary * 2
+/	除法	salary / 2
+%	取模（余数）	salary % 3
+
+示例：
+SELECT name, salary
+FROM employee
+WHERE salary * 2 > 10000;
+返回所有工资乘以 2 后大于 10000 的员工信息。
+
+
+
+
