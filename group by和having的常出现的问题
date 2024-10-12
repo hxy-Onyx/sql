@@ -1,0 +1,32 @@
+1.where和 having的区别
+where是分组前过滤，having是分组后过滤，所以where不能使用聚合函数进行过滤，having可以使用聚合函数
+举例：
+SELECT department, COUNT(*)
+FROM employees
+GROUP BY department
+WHERE COUNT(*) > 5;  -- 错误：WHERE 不能用于过滤聚合结果
+  
+2. 选择的列不在 GROUP BY 中
+在使用 GROUP BY 时，一个常见的问题是试图在 SELECT 中选择未包含在 GROUP BY 或聚合函数中的列。这会导致查询报错，因为 SQL 引擎不知道如何处理未分组的列。
+举例：
+SELECT department, employee_name, COUNT(*)
+FROM employees
+GROUP BY department;
+这段代码会报错，因为 employee_name 没有出现在 GROUP BY 子句中，也没有被聚合函数使用。
+正确做法：
+所有不在聚合函数中的列都必须出现在 GROUP BY 中，或者你可以选择应用一个聚合函数（如 MAX()、MIN()）。
+
+SELECT department, MAX(employee_name), COUNT(*)
+FROM employees
+GROUP BY department;
+
+3. 使用 HAVING 而不是 WHERE 来过滤非聚合条件
+
+  HAVING 通常用于过滤聚合后的结果，而 WHERE 则用于过滤非聚合条件。有时开发人员错误地使用 HAVING 过滤非聚合列，这会导致查询效率低下，因为 HAVING 是在分组后应用的，而 WHERE 是在分组前应用的。
+错误示例：
+SELECT department, COUNT(*)
+FROM employees
+GROUP BY department
+HAVING department = 'Sales';  -- 错误：这应该用 WHERE 过滤
+  在这个示例中，我们没有必要使用 HAVING，因为 department 不是聚合的结果。
+
