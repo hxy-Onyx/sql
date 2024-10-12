@@ -13,6 +13,7 @@ SELECT department, COUNT(*)
 FROM employees
 GROUP BY department
 HAVING COUNT(*) > 5;
+而且where的使用顺序应该在group by前面
 
 2. 选择的列不在 GROUP BY 中
  SELECT 中选择未包含在 GROUP BY 或聚合函数中的列,这会导致查询报错，因为 SQL 引擎不知道如何处理未分组的列。
@@ -46,6 +47,7 @@ SELECT department, COUNT(*)
 FROM employees
 WHERE department = 'Sales'
 GROUP BY department;
+
 4. 在 HAVING 中使用错误的聚合函数
 在使用 HAVING 时，可能会由于聚合函数使用不当导致结果不符合预期。例如，COUNT() 和 SUM() 等函数的作用不同，错误使用可能会带来意想不到的结果。
 
@@ -62,6 +64,7 @@ SELECT department, SUM(salary)
 FROM employees
 GROUP BY department
 HAVING SUM(salary) > 50000;
+
 5. GROUP BY 后的 ORDER BY 问题
 GROUP BY 常与 ORDER BY 一起使用进行结果排序。然而，有时我们希望对聚合结果排序，但误用了分组列进行排序。这会导致结果与预期不符。
 
@@ -78,6 +81,7 @@ SELECT department, COUNT(*) AS employee_count
 FROM employees
 GROUP BY department
 ORDER BY employee_count DESC;  -- 按员工数量降序排序
+
 6. 使用 HAVING 代替 WHERE 影响性能
 虽然 HAVING 可以用来实现与 WHERE 类似的过滤功能，但由于 HAVING 是在数据分组后才执行，使用 HAVING 过滤非聚合列会导致查询性能降低。最佳实践是尽量使用 WHERE 过滤数据。
 
@@ -95,6 +99,7 @@ SELECT department, COUNT(*)
 FROM employees
 WHERE department = 'HR'
 GROUP BY department;
+
 7. 忽略空值（NULL）处理
 GROUP BY 将所有 NULL 值视为一组。因此，当列中有 NULL 值时，它们会作为一个独立的分组出现，这可能会导致意外的结果。
 
