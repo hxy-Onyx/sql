@@ -52,7 +52,7 @@ SELECT department, MAX(employee_name), COUNT(*)
 FROM employees
 GROUP BY department;  -- 使用聚合函数 MAX() 来处理未分组的列
 这里：如果又想分组，但是又想展示所有的列信息，应该怎么办
-
+使用自连接、表外连接
 
 3. 使用 HAVING 而不是 WHERE 来过滤非聚合条件
 问题： HAVING 通常用于过滤聚合结果，而 WHERE 用于过滤非聚合列。如果你在 HAVING 中使用非聚合条件，会导致性能下降。
