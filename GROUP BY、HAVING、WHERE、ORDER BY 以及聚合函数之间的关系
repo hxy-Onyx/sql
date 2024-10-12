@@ -58,111 +58,88 @@ GROUP BY department;  -- 使用聚合函数 MAX() 来处理未分组的列
 问题： HAVING 通常用于过滤聚合结果，而 WHERE 用于过滤非聚合列。如果你在 HAVING 中使用非聚合条件，会导致性能下降。
 
 错误示例：
-
-sql
-复制代码
 SELECT department, COUNT(*)
 FROM employees
 GROUP BY department
 HAVING department = 'Sales';  -- 错误：这是非聚合条件，应该用 WHERE
 正确做法：
 
-sql
-复制代码
+
 SELECT department, COUNT(*)
 FROM employees
 WHERE department = 'Sales'  -- 使用 WHERE 过滤非聚合列
 GROUP BY department;
+
 4. 在 HAVING 中使用错误的聚合函数
 问题： 在 HAVING 子句中过滤分组时，聚合函数的使用必须正确，否则会得到不符合预期的结果。
 
 错误示例：
-
-sql
-复制代码
 SELECT department, SUM(salary)
 FROM employees
 GROUP BY department
 HAVING COUNT(salary) > 5;  -- 错误：我们想过滤工资总和，但用错了聚合函数
-正确做法：
 
-sql
-复制代码
+正确做法：
 SELECT department, SUM(salary)
 FROM employees
 GROUP BY department
 HAVING SUM(salary) > 100000;  -- 使用 SUM() 来正确过滤工资总和
+
 5. GROUP BY 后的 ORDER BY 问题
 问题： 在使用 GROUP BY 后进行排序时，开发者可能错误地使用了非聚合列进行排序，导致结果与预期不符。
 
 错误示例：
-
-sql
-复制代码
 SELECT department, COUNT(*)
 FROM employees
 GROUP BY department
 ORDER BY department DESC;  -- 错误：我们应该按聚合结果排序，而不是按部门名
-正确做法：
 
-sql
-复制代码
+正确做法：
 SELECT department, COUNT(*) AS employee_count
 FROM employees
 GROUP BY department
 ORDER BY employee_count DESC;  -- 按聚合结果（员工数量）排序
+
 6. 使用 HAVING 代替 WHERE 影响性能
 问题： WHERE 是在分组之前执行的，而 HAVING 是在分组之后执行。如果你在 HAVING 中使用非聚合条件，可能会导致性能问题。
 
 错误示例：
-
-sql
-复制代码
 SELECT department, COUNT(*)
 FROM employees
 GROUP BY department
 HAVING department = 'IT';  -- 错误：应该使用 WHERE
 正确做法：
-
-sql
-复制代码
 SELECT department, COUNT(*)
 FROM employees
 WHERE department = 'IT'  -- 使用 WHERE 来过滤非聚合条件
 GROUP BY department;
+
 7. 忽略空值（NULL）处理
 问题： 在分组时，GROUP BY 会将 NULL 值视为一个独立的分组。如果你不想要 NULL 值成为单独的一组，必须处理 NULL 值。
 
 解决方法：
-
-sql
-复制代码
 SELECT COALESCE(department, 'Unknown') AS department, COUNT(*)
 FROM employees
 GROUP BY department;
+
 8. GROUP BY 时的性能问题
-问题： 在处理大数据时，GROUP BY 操作可能很耗时。如果分组列没有索引，查询性能会受到影响。
+在处理大数据时，GROUP BY 操作可能很耗时。如果分组列没有索引，查询性能会受到影响。
 
 优化建议：
-
 在需要分组的列上创建索引。
 避免不必要的复杂分组，减少 GROUP BY 中的列数。
+
 9. 多列分组中的细节处理
-问题： 在使用 GROUP BY 时，如果你想按多个列分组，每个列的组合都会产生一个独立的分组。如果你不需要这些组合，可能会产生不必要的复杂性。
+在使用 GROUP BY 时，如果你想按多个列分组，每个列的组合都会产生一个独立的分组。如果你不需要这些组合，可能会产生不必要的复杂性。
 
 示例：
-
-sql
-复制代码
 SELECT department, location, COUNT(*)
 FROM employees
 GROUP BY department, location;  -- 每个部门和地点的组合生成一个分组
 如果你只想按部门分组，而不需要按地点分组，则可以省略 location：
 
-sql
-复制代码
+
 SELECT department, COUNT(*)
 FROM employees
 GROUP BY department;
-总结
-通过这些示例，你可以看到 GROUP BY、HAVING、WHERE、ORDER BY 以及聚合函数之间的常见问题及其解决方法。确保在正确的地方使用 WHERE 和 HAVING，以及正确使用聚合函数，是编写高效 SQL 查询的关键。在 PL/SQL 和 SQL 中，这些问题和解决方案都适用。
+
