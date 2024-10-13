@@ -11,3 +11,18 @@ WHERE 表A.关联列 = 表B.关联列;
 inner join on 可以换成 where
 
 举例：
+INSERT INTO employees VALUES(1,'Alice',10,7000);
+INSERT INTO employees VALUES(2,'Bob',20,6000);
+INSERT INTO employees VALUES(3,'Charlie',10,5500);
+INSERT INTO employees VALUES(4,'Diana',30,6200);
+INSERT INTO employees VALUES(5,'Eve',20,5800);
+
+INSERT INTO departments VALUES(10,'Engineering');
+INSERT INTO departments VALUES(20,'Sales');
+INSERT INTO departments VALUES(30,'HR ');
+INSERT INTO departments VALUES(40,'Marketing');
+
+//使用内连接查询工资大于5000的员工姓名、部门名称和工资，并将结果输出到控制台
+
+SELECT e.employee_name,d.department_name,e.salary FROM employees e ,departments d 
+WHERE e.department_id =d.department_id
