@@ -6,7 +6,7 @@ SQL 查询的执行顺序大致如下：
 5.SELECT：选择需要的列，并应用别名。
 6.ORDER BY：对结果集进行排序。
 
-表别名的使用
+常出现的错误：表别名的使用
 举例：
 错误例子
 SELECT department AS dept, COUNT(*) AS emp_count
