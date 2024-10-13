@@ -1,1 +1,46 @@
+CREATE TABLE employees(
+employee_id INT,
+employee_name VARCHAR(20),
+department_id INT,
+salary INT
+);
 
+CREATE TABLE departments(
+department_id INT,
+department_name VARCHAR(20)
+);
+
+
+INSERT INTO employees VALUES(1,'Alice',10,7000);
+INSERT INTO employees VALUES(2,'Bob',20,6000);
+INSERT INTO employees VALUES(3,'Charlie',10,5500);
+INSERT INTO employees VALUES(4,'Diana',30,6200);
+INSERT INTO employees VALUES(5,'Eve',20,5800);
+INSERT INTO employees VALUES (6, 'John Doe', NULL, 5000);
+
+
+INSERT INTO departments VALUES(10,'Engineering');
+INSERT INTO departments VALUES(20,'Sales');
+INSERT INTO departments VALUES(30,'HR ');
+INSERT INTO departments VALUES(40,'Marketing');
+
+
+查询所有员工的姓名、所在部门及其工资，包括那些未分配部门的员工。
+1.左外连接
+查询所有员工的姓名、所在部门及其工资，包括那些未分配部门的员工。
+SELECT e.employee_name,d.department_name,e.salary
+FROM employees e 
+LEFT JOIN departments d 
+ON e.department_id =d.department_id ;
+ 
+查询所有部门及其员工信息，包括那些没有员工的部门
+2.右外连接
+SELECT d.department_id,e.employee_name,d.department_name,e.salary
+FROM  employees e 
+RIGHT JOIN departments d 
+ON e.department_id =d.department_id ;
+
+查询所有员工及所有部门信息，包括那些没有匹配关系的员工或部门。
+3.全外连接
+mysql中没有，oracle中有
+4.交叉连接
