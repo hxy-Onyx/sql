@@ -1,0 +1,13 @@
+1.显示语法
+SELECT 列1, 列2, ...
+FROM 表A
+INNER JOIN 表B
+ON 表A.关联列 = 表B.关联列;
+
+2.隐式表达
+SELECT 列1, 列2, ...
+FROM 表A, 表B
+WHERE 表A.关联列 = 表B.关联列;
+inner join on 可以换成 where
+
+举例：
