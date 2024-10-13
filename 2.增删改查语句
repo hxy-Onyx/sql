@@ -10,7 +10,7 @@ INSERT INTO `goods` (id, goods_name, price)
 	VALUES(20, '苹果手机', 3000);
 2.update语句
 update `goods` set price=price+1000 where id=10;
-3.delete 语句
+3.delete 语句 delete是删除表记录，drop是删除表
 delete from `goods` where id=10;
 4.select语句：重点查询语句
 基本语法
