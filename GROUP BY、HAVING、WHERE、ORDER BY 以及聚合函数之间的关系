@@ -17,11 +17,9 @@ INSERT INTO employees (employee_id, employee_name, department, location, salary,
 
 
 1. where和having在使用聚合函数时的错误
-where的作用是在分组前过滤数据
-having是和group by合用，用来数据
-而聚合函数的结果，是group by之后的计算结果
-所以where不能使用聚合函数，即使没有group by where也不能使用聚合函数
-
+有where子句的存在就不能使用聚合函数，
+having可以使用聚合函数
+举例：
 错误示例：
 SELECT department, COUNT(*)
 FROM employees
@@ -34,14 +32,15 @@ FROM employees
 GROUP BY department
 HAVING COUNT(*) > 1;  -- 使用 HAVING 来过滤聚合结果
 
-2. 选择的列不在 GROUP BY 中
-SELECT 中的所有列要么必须在 GROUP BY 中，要么必须使用聚合函数。如果你在 SELECT 中选择了未在 GROUP BY 中的列，SQL 会报错。
-这显示了groupby子句对select的限制：这是因为数据库无法确定如何处理这些未分组或未聚合的列的数据。
+原因：where的作用是在分组前过滤数据
+having是和group by合用，用来计算分组后的数据
+而聚合函数的结果，是group by之后的计算结果
+所以where不能使用聚合函数，即使没有group by where也不能使用聚合函数
 
-为什么：
-数据库会将查询结果按指定的列进行分组。对于每个分组，数据库需要确定如何处理 SELECT 中的每一列，
-对于未出现在 GROUP BY 中且未使用聚合函数的列，数据库无法确定在每个分组中应该返回哪一行的数据。
-
+2. group by子句对select的限制
+SELECT 中的所有列要么必须在 GROUP BY 中，要么必须使用聚合函数。
+如果在 SELECT 中选择了未在 GROUP BY 中的列，SQL 会报错。
+举例：
 错误示例：
 SELECT department, employee_name, COUNT(*)
 FROM employees
@@ -51,8 +50,11 @@ GROUP BY department;  -- 错误：employee_name 没有在 GROUP BY 中
 SELECT department, MAX(employee_name), COUNT(*)
 FROM employees
 GROUP BY department;  -- 使用聚合函数 MAX() 来处理未分组的列
-这里：如果又想分组，但是又想展示所有的列信息，应该怎么办
-可以使用order by
+为什么：
+这显示了group by子句对select的限制：这是因为数据库无法确定如何处理这些未分组或未聚合的列的数据。
+数据库会将查询结果按指定的列进行分组。对于每个分组，数据库需要确定如何处理 SELECT 中的每一列，
+对于未出现在 GROUP BY 中且未使用聚合函数的列，数据库无法确定在每个分组中应该返回哪一行的数据。
+
 
 3. 使用 HAVING 而不是 WHERE 来过滤非聚合条件
 问题： HAVING 通常用于过滤聚合结果，而 WHERE 用于过滤非聚合列。如果你在 HAVING 中使用非聚合条件，会导致性能下降。
@@ -69,6 +71,11 @@ SELECT department, COUNT(*)
 FROM employees
 WHERE department = 'Sales'  -- 使用 WHERE 过滤非聚合列
 GROUP BY department;
+
+为什么：
+WHERE 子句过滤在分组之前，减少了需要分组和聚合的数据量，从而提高查询性能。
+HAVING 子句过滤在分组之后，意味着所有行都必须先被分组和聚合，之后再进行过滤，这会增加不必要的计算和资源消耗，导致性能下降。
+逻辑上，非聚合条件属于数据筛选的基本步骤，应该在分组之前完成。将其放在 HAVING 中，不仅违反了 SQL 的逻辑顺序，还可能导致理解上的混淆
 
 4. 在 HAVING 中使用错误的聚合函数
 问题： 在 HAVING 子句中过滤分组时，聚合函数的使用必须正确，否则会得到不符合预期的结果。
