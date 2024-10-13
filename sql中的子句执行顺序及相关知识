@@ -1,0 +1,23 @@
+SQL 查询的执行顺序大致如下：
+1.FROM：确定查询的数据源，包括表连接。
+2.WHERE：过滤满足条件的行。
+3.GROUP BY：对数据进行分组。
+4.HAVING：过滤满足聚合条件的组。
+5.SELECT：选择需要的列，并应用别名。
+6.ORDER BY：对结果集进行排序。
+
+表别名的使用
+举例：
+错误例子
+SELECT department AS dept, COUNT(*) AS emp_count
+FROM employees
+GROUP BY department
+HAVING dept = 'Sales';  -- 错误：dept 是 SELECT 中的别名，不能在 HAVING 中直接使用
+正确；
+SELECT department, COUNT(*) AS emp_count
+FROM employees
+WHERE department = 'Sales'  -- 使用原始列名进行过滤
+GROUP BY department;
+HAVING EMP_COUNT >100;
+
+但是集计函数的别名可以被使用；
