@@ -1,0 +1,59 @@
+CREATE TABLE Accounts (
+    account_id VARCHAR(10) PRIMARY KEY,
+    balance DECIMAL(20, 2) NOT NULL   
+    );   
+
+
+CREATE TABLE Transfers (
+    transfer_id VARCHAR(10) PRIMARY KEY, 
+    from_account VARCHAR(10) NOT NULL,   
+    to_account VARCHAR(10) NOT NULL,     
+    amount DECIMAL(20, 2) NOT NULL,        
+    transfer_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,   
+    FOREIGN KEY (from_account) REFERENCES Accounts(account_id),
+     FOREIGN KEY (to_account) REFERENCES Accounts(account_id)
+);
+
+
+INSERT INTO Accounts  VALUES ('A123', 500.00);
+INSERT INTO Accounts  VALUES ('B456', 300.00);
+INSERT INTO Accounts  VALUES ('C789', 1000.00);
+
+INSERT INTO Transfers (transfer_id, from_account, to_account, amount)VALUES ('T001', 'A123', 'B456', 100.00);
+INSERT INTO Transfers(transfer_id, from_account, to_account, amount) VALUES ('T002', 'C789', 'A123', 200.00);
+
+
+
+创建两个表：希望实现一个转账操作，即从一个账户扣款，同时向另一个账户存款，并记录这次转账。如果在任何一步出现错误，整个操作应回滚
+
+START TRANSACTION;--开始事务
+savapoint 设置保存点
+rollback to回退事务
+rollback 回退全部事务
+commit 提交事务
+
+-- 开始事务
+START TRANSACTION;
+
+UPDATE Accounts
+SET balance = balance - 100
+WHERE account_id = 'A123';
+
+SAVEPOINT a;
+
+UPDATE Accounts
+SET balance = balance + 100
+WHERE account_id = 'B456';
+
+SAVEPOINT b;
+
+INSERT INTO Transfers (transfer_id, from_account, to_account, amount)
+VALUES ('T789', 'A123', 'B456', 100);
+
+ROLLBACK;
+ROLLBACK TO a;
+ROLLBACK TO b;
+
+COMMIT;
+
+
