@@ -43,4 +43,4 @@ ON e.department_id =d.department_id ;
 查询所有员工及所有部门信息，包括那些没有匹配关系的员工或部门。
 3.全外连接
 mysql中没有，oracle中有
-4.交叉连接
+
