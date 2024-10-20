@@ -19,3 +19,4 @@ select 列名 from 表明 各种子句
 1.select*from `goods`；
 2.select disctint 列名 from 表名 where 筛选子句 
 
+truncate
