@@ -21,3 +21,5 @@ select 列名 from 表明 各种子句
 
 truncate
 rownum
+exist not exists
+like 
